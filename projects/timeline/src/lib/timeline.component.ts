@@ -17,18 +17,18 @@ import { interval, Subscription } from 'rxjs';
 export class DateUtil {
 
   /**
-   * Formats the given date according to the specified format.
-   * @param date The date to format.
-   * @param format The format string, using the following placeholders:
+   * Formats the given date according to the specified displayDateFormat.
+   * @param date The date to displayDateFormat.
+   * @param displayDateFormat The displayDateFormat string, using the following placeholders:
    *   - YYYY: four-digit year
    *   - MM: two-digit month (zero-padded)
    *   - DD: two-digit day of month (zero-padded)
-   *   - HH: two-digit hour (zero-padded, 24-hour format)
+   *   - HH: two-digit hour (zero-padded, 24-hour displayDateFormat)
    *   - mm: two-digit minute (zero-padded)
    *   - ss: two-digit second (zero-padded)
    * @returns The formatted date string.
    */
-  static formatDate(date: Date, format: string): string {
+  static formatDate(date: Date, displayDateFormat: string): string {
     // Extract the year, month, day, hours, minutes, and seconds from the date
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -37,8 +37,8 @@ export class DateUtil {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
 
-    // Replace the placeholders in the format string with the corresponding date parts
-    return format
+    // Replace the placeholders in the displayDateFormat string with the corresponding date parts
+    return displayDateFormat
       .replace('YYYY', year)
       .replace('MM', month)
       .replace('DD', day)
@@ -109,7 +109,7 @@ export class NgxVideoTimelineComponent implements OnInit, OnChanges {
     // color of the playBar
     @Input() playBarColor: string;
 
-
+    @Input() displayDateFormat: string;
     // relation to Css End
 
     // Video clips
@@ -242,6 +242,7 @@ export class NgxVideoTimelineComponent implements OnInit, OnChanges {
                 }
             }
         ];
+        this.displayDateFormat = "hh:mm:ss"
         this.verticalBarColor = 'rgba(0,0,0,1)';
         this.bottomLineColor = 'rgba(0,0,0,1)';
         this.borderColor = '#fff';
@@ -670,7 +671,7 @@ export class NgxVideoTimelineComponent implements OnInit, OnChanges {
         this.ctx.fillStyle = this.playBarColor;
         this.ctx.textAlign = 'center';
         this.ctx.fillText(
-            DateUtil.formatDate(new Date(time), 'YYYY-MM-DD HH:mm:ss'),
+            DateUtil.formatDate(new Date(time), this.displayDateFormat),
             this.playBarOffsetX,
             (this.scale * 4.25)
         );
@@ -802,7 +803,7 @@ export class NgxVideoTimelineComponent implements OnInit, OnChanges {
             this.ctx.fillText(
                 DateUtil.formatDate(
                     new Date(time),
-                    'YYYY-MM-DD HH:mm:ss'
+                    this.displayDateFormat
                 ),
                 posX,
                 (this.scale * 3)
